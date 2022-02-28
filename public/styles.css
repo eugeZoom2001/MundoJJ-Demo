@@ -1,0 +1,35 @@
+
+.form-control {
+    background: transparent !important;
+    color: #fff !important;
+    border-radius: 0px;
+	border: 0px;
+	border-bottom: 1px solid white;
+}
+
+a .fab {
+    color: #fff;
+    font-size: 30px;
+    margin: 0 10px;
+}
+
+.form-control2 {
+    background: transparent !important;
+    color: #000 !important;
+    border-radius: 0px;
+	border: 0px;
+	border-bottom: 1px solid black;
+
+}	
+
+a .fas {
+    color: #fbdb02;
+    font-size: 60px;
+    margin: 0 10px;
+}	
+	
+a .far {
+    color: #fff;
+    font-size: 30px;
+    margin: 0 10px;
+}
