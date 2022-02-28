@@ -1,7 +1,6 @@
 $(document).ready(function () {
   AbrirSesion(TIEMPO_MAX_SESSION);
   start();
-  
 }); // on ready
 
 const start = () => {
@@ -12,64 +11,61 @@ const start = () => {
   }
 };
 
-$('#table').bootstrapTable({
-    pagination: true,
-    search: true,
-    columns: [{
-      field: 'id',
-      title: 'ID',
-      sortable:true
-    }, {
-      field: 'nombre',
-      title: 'Nombre',
-      sortable:true
-    }, {
-      field: 'mail',
-      title: 'Email'
-    }, {
-      field: 'telefonos',
-      title: 'Telefonos'
-    }, {
-      field: 'direccion',
-      title: 'Direccion'
-     },{
+$("#table").bootstrapTable({
+  pagination: true,
+  search: true,
+  columns: [
+    {
+      field: "id",
+      title: "ID",
+      sortable: true,
+    },
+    {
+      field: "nombre",
+      title: "Nombre",
+      sortable: true,
+    },
+    {
+      field: "mail",
+      title: "Email",
+    },
+    {
+      field: "telefonos",
+      title: "Telefonos",
+    },
+    {
+      field: "direccion",
+      title: "Direccion",
+    },
+    {
       field: "contacto",
-      title: "Contacto"
-     },
+      title: "Contacto",
+    },
   ],
-    
-  })
+});
 
-  
-
-
- const inicio = () => {
-    S_CargarServerAuth(url_proveedores,"GET",{})
+const inicio = () => {
+  S_CargarServerAuth(url_proveedores, "GET", {})
     .then((result) => {
-     if(result.result==="ok"){ 
+      if (result.result === "ok") {
         result.data.forEach((element) => {
-        element.id=element._id
-              
-        $('#table').bootstrapTable('append', element);
-       
-      });
-     }
-    }).catch((err) => {
-      
-    });  
-     
-}
+          element.id = element._id;
 
+          $("#table").bootstrapTable("append", element);
+        });
+      }
+    })
+    .catch((err) => {});
+};
 
 const salir = () => {
-  document.location.href='stockaltapro.html'; 
-}
+  document.location.href = "stockaltapro.html";
+};
 
-// EVENTOS 
+// EVENTOS
 
 // evento click api
 $("#table").on("click-row.bs.table row", function (e, value, row, index) {
-  dSetItem("datosProveedor",value);
+  dSetItem("datosProveedor", value);
   salir();
 });
-
