@@ -9,18 +9,16 @@ let patenteActual,
   vencimiento2Actual = null;
 //let parametros_moviles = { cliente: id_empresa, tipoConsulta: "moviles" };
 $(document).ready(function () {
-  
   $("#idModalVencimiento1").datepicker();
   $("#idModalVencimiento2").datepicker();
- 
+
   AbrirSesion(TIEMPO_MAX_SESSION);
   start();
 }); // on ready
 
-
 const start = () => {
   if (Logueado()) {
-  init();    
+    init();
   } else {
     CerrarSessionYSalir();
   }
@@ -41,18 +39,10 @@ function init() {
             id: element._id,
             vencimiento1: crearFechaMostrar(element.vencimiento1.trim()),
             vencimiento2: crearFechaMostrar(element.vencimiento2.trim()),
-            venc1D: diferenciaT(
-              new Date(),
-              crearFechaDate(crearFechaMostrar(element.vencimiento1.trim())),
-              "d"
-            ),
-            venc2D: diferenciaT(
-              new Date(),
-              crearFechaDate(crearFechaMostrar(element.vencimiento2.trim())),
-              "d"
-            ),
           };
-          // console.log("vencimiento", dataMovil);
+          dataMovil.venc1D = calcularDias(dataMovil.vencimiento1);
+          dataMovil.venc2D = calcularDias(dataMovil.vencimiento2);
+
           const itemNuevo = crearItem(dataMovil);
           agregarItemTabla(itemNuevo);
         });
@@ -63,11 +53,24 @@ function init() {
     .catch((err) => {});
 }
 
+const calcularDias = (params) => {
+  let dias = -500000;
+  if (params.length > 0) {
+    let fecha = params;
+    fecha = convertirFechaServer(fecha);
+    console.log("fecha", fecha);
+    let date = new Date(fecha);
+    dias = diferenciaT(new Date(), date, "d");
+    console.log("diferencia", dias);
+  }
+
+  return dias;
+};
+
 // Varios
 
 function cargarTareasMovil(arrTareas) {
   $.each(arrTareas, function (key, value) {
-    //console.log( key + ": " + value.t_patente);
     agregarTarea(value.tarea, crearFechaMostrar(value.fecha));
   });
 }
@@ -100,10 +103,8 @@ function Refrescar(tag) {
 }
 
 $("#idBotonRefrescar").on("click", function () {
-  
   $("#idBuscar").val("");
   Refrescar("#idBuscar");
-  
 });
 
 function tablaContarItems() {
@@ -147,7 +148,6 @@ $("#idTablaMovil").on("click", ".btn-edit", function () {
 });
 
 function cargarModalMovil(data) {
-  
   $("#idModalPatente").val(data.patente);
   $("#idModalVencimiento1").val(data.vencimiento1.trim());
   $("#idModalVencimiento2").val(data.vencimiento2.trim());
@@ -162,8 +162,6 @@ $("#myModal6").on("click", ".btn-guardarModal", function () {
     vencimiento1: convertirFechaServer(vencimiento1),
     vencimiento2: convertirFechaServer(vencimiento2),
   };
-
-  
 
   S_CargarServerAuth(`${url_autos}/${patenteActual}`, "PATCH", dataUpdate)
     .then((result) => {
@@ -207,7 +205,6 @@ function GuardarEditarModal(data) {
 // ************** BORRAR MOVIL
 
 $("#idTablaMovil").on("click", ".btn-borrar", function () {
-  
   let currentRow = $(this).closest("tr");
   patenteBorrar = currentRow.find("td:eq(4)").text();
   tagBorrar = $(this).closest("tr");
@@ -234,7 +231,7 @@ function agregarItemTabla(itemNuevo) {
 function crearItem(itemLista) {
   let tr;
   tr = document.createElement("tr");
-  
+
   let tdRow = document.createElement("th");
   tdRow.innerText = tablaContarItems();
   tdRow.setAttribute("scope", "row");
@@ -282,8 +279,7 @@ function crearItem(itemLista) {
   let tdBotones = document.createElement("td");
   let divBotones = document.createElement("div");
   divBotones.setAttribute("class", "btn-group btn-group-sm");
-  
-  
+
   divBotones.setAttribute("role", "group");
   divBotones.setAttribute("aria-label", "Basic mixed styles example");
 
@@ -311,6 +307,7 @@ function crearItem(itemLista) {
 }
 
 function VenciClaseCelda(valor) {
+  // console.log("dias", valor);
   const x = valor;
   let color = "bg-light";
   switch (true) {

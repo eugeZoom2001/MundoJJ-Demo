@@ -74,7 +74,7 @@ function crearFechaServer() {
 
 // recibe un string dd/mm/yyyy y lo convierte en otro yyyy-mm-dd
 const convertirFechaServer = (fecha) => {
-  console.log(fecha);
+  //console.log(fecha);
   fechaNueva = "1970-01-01";
   if (fecha.length > 0) {
     let fechaArr = fecha.split("/");
