@@ -58,10 +58,8 @@ const calcularDias = (params) => {
   if (params.length > 0) {
     let fecha = params;
     fecha = convertirFechaServer(fecha);
-    console.log("fecha", fecha);
     let date = new Date(fecha);
     dias = diferenciaT(new Date(), date, "d");
-    console.log("diferencia", dias);
   }
 
   return dias;
