@@ -13,18 +13,17 @@ app.use(express.json()); //Used to parse JSON bodies
 app.use(express.urlencoded({ extended: true })); //Parse URL-encoded bodies
 app.use(helmet());
 app.use(xss());
-
+appSockets = express();
+//appSockets.use(cors2());
 const authenticateUser = require("./middleware/authentication");
 
 let routeUser = require("./routes/user");
-let routerAutos = require("./routes/autos");
-let routerStock = require("./routes/stock");
-let routerProveedores = require("./routes/proveedores");
 
 app.use("/api/v1/user", routeUser);
-app.use("/api/v1/autos", authenticateUser, routerAutos);
-app.use("/api/v1/stock", authenticateUser, routerStock);
-app.use("/api/v1/proveedores", authenticateUser, routerProveedores);
+
+app.get("/", (req, res) => {
+  res.send("hola , soy Server 8800!");
+});
 
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
@@ -35,9 +34,29 @@ app.use(notFoundMiddleware); // si encuentra la ruta , aca no va a entrar
 app.use(errorHandlerMiddleware);
 
 //******************************************** */
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8800;
 
-const start = async () => {
+//***************** Sockets ************************** */
+
+// const serverSockets = require("http").Server(appSockets, {
+//   cors: {
+//     origin: "http://localhost:3000",
+//   },
+// });
+const serverSockets = require("http").Server(appSockets);
+const socketio = require("socket.io")(serverSockets);
+appSockets.set("port", process.env.SOCKET_PORT || 5000);
+
+//Ejecutamos la función de sockets.js
+require("./sockets")(socketio);
+
+const startSockets = () => {
+  serverSockets.listen(appSockets.get("port"), () => {
+    console.log("Servidor sockets en el puerto ", appSockets.get("port"));
+  });
+};
+
+const startServer = async () => {
   try {
     // connectDB
     await connectDB(process.env.DB_URI_LOCAL);
@@ -49,4 +68,6 @@ const start = async () => {
   }
 };
 
-start();
+//startServer();
+
+startSockets();

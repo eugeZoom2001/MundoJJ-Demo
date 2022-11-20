@@ -1,5 +1,5 @@
 {
-  "name": "MundoJJ",
+  "name": "apichatweb",
   "version": "1.0.0",
   "description": "Web MundoJJ node mongo",
   "main": "app.js",
@@ -21,6 +21,7 @@
     "jsonwebtoken": "^8.5.1",
     "luxon": "^1.27.0",
     "mongoose": "^6.1.7",
+    "socket.io": "^4.5.1",
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
